@@ -1,11 +1,15 @@
 import React, { ChangeEvent } from 'react'
 import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useState } from 'react'
-import { router, useForm } from '@inertiajs/react'
+import { useForm } from '@inertiajs/react'
 
-function CreateGoalModal() {
+type Props = {
+    open:  boolean
+
+}
+function CreateGoalModal(props:Props) {
   // The open/closed state lives outside of the `Dialog` and is managed by you
-  let [isOpen, setIsOpen] = useState(true)
+  let [isOpen, setIsOpen] = useState(props.open)
   const { data, setData, post } = useForm({
     name: '',
     priority: 2
@@ -13,7 +17,7 @@ function CreateGoalModal() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    post( router('goals.store'))
+    post( route('goals.store'))
 
   }
 
