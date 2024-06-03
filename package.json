@@ -22,6 +22,11 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "clsx": "^2.1.1",
+        "react-hot-keys": "^2.7.3",
+        "react-hotkeys-hook": "^4.5.0",
+        "react-textarea-autosize": "^8.5.3",
+        "tailwind-merge": "^2.3.0",
         "typescript": "^5.4.5",
         "ziggy-js": "^2.2.1"
     }

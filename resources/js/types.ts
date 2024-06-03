@@ -14,3 +14,4 @@ export interface Goal {
     name: string
     priority: number
 }
+
