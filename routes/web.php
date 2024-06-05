@@ -3,6 +3,7 @@
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\GoalsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TodoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,6 +27,7 @@ Route::middleware('auth')->group(function () {
 
 Route::group([], function () {
     Route::post('/goals', [GoalsController::class, 'store'])->name('goals.store');
+    Route::post('/todo', [TodoController::class, 'store'])->name('todo.store');
 
 })->middleware('auth');
 

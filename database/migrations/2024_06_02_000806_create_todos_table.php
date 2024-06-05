@@ -17,7 +17,7 @@ return new class extends Migration
             $table->tinyInteger('effort')->default(1);
             $table->tinyInteger('value')->default(3);
             $table->text('activity');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->bigInteger('project_id')->nullable();
             $table->bigInteger('client_id')->nullable();
             $table->bigInteger('goal_id')->nullable();
