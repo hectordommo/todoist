@@ -6,6 +6,8 @@ import CreateGoalModal from '../Components/Todo/CreateGoalModal';
 import TodoModal from '../Components/Todo/TodoModal';
 import TodosList from '../Components/Todo/TodosList';
 import useTodosIU from '../store/TodosUI';
+import Cmdk from '../Components/Cmdk';
+import ClientModal from '../Components/Client/ClientModal';
 type Props = {
   auth: Auth,
   goals: Goal[]
@@ -20,7 +22,9 @@ export default function Dashboard({ auth, goals, todos, clients }: Props) {
       user={auth.user}
     >
       <Head title="Dashboard" />
-          <CreateGoalModal open={false} />
+      <CreateGoalModal open={false} />
+      <ClientModal goals={goals} priorities={priorities} />
+      <Cmdk />
 
       <div className="pt-4">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-row justify-evenly overflow-x-scroll">

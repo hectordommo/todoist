@@ -1,86 +1,44 @@
 // Modal para editar o crear tareas
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
-import { useState } from 'react'
 import ReactTextareaAutosize from 'react-textarea-autosize'
-import Task from '../Icons/Task'
 import { useForm } from '@inertiajs/react'
-import { Goal, Todo } from '../../types'
-import { useHotkeys } from 'react-hotkeys-hook'
-import Combo from '../UI/Combobox'
 import { useGoalCarouselSelector } from '../../hooks/useGoals'
+import { usePriorityCarouselSelector } from '../../hooks/usePriority'
+import { parseColor } from '@react-spectrum/color'
+import { motion, useMotionValue } from 'framer-motion'
 
-type Props = {
-  goals: Goal[]
-  todo: Todo | null
-  priorities: string[]
-}
-function clamp(number, min, max) {
-  return Math.max(min, Math.min(number, max));
-}
 
-function TodoModal({ goals, todo, priorities, clients }: Props) {
-  const { goal, toggleObjective, index: goalIndex } = useGoalCarouselSelector(goals)
-  const [createClient , setCreateClient ] = useState(false)
-  let [isOpen, setIsOpen] = useState(false)
-  const { data, setData, post, errors } = useForm({
-    activity: '',
-    description: '',
-    goal: 0,
-    effort: 1,
-    goal_id: null,
-    client_id: null,
-    priority: 3
+const ClientModal = ({goals, priorities}) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [isDragging, setDragging] = useState(false)
+  const [delta, setDelta] = useState(0)
+  const [hue, setHue] = useState(50)
+  const [initialX, setInitialX] = useState<number |null>(null)
+  const { goal, toggleObjective } = useGoalCarouselSelector(goals)
+  const { priority, togglePriority } = usePriorityCarouselSelector( priorities)
+  let [color, setColor] = useState(parseColor(`hsl(${hue}, 100%, 50%)`));
+  const [width, setWidth] = useState(10)
+  const { errors, setData, data } = useForm({
+    name: '',
+    priority: priority,
+    color: color.toString('hex')
   })
-  useHotkeys('alt + n', () => setIsOpen(true))
-
-  useEffect((l) => {
-    const listener = (ev) => {
-      console.log(ev)
-      if(ev.type == 'todo:edit') {
-        setIsOpen(true)
+  const handleColorChange = (e) => {
+    if(isDragging) {
+      if(initialX === null)
+        setInitialX(e.screenX)
+      if(initialX !== null) {
+        let nw = Math.ceil(e.screenX) //.toString() +'px'
+        setWidth(nw)
+        setDelta( e.screenX - initialX)
+        console.log('draggin', width)
       }
-      if(ev.type == 'client:modal:open') {
-        console.log('open create clien modal')
-      }
+
     }
-    window.addEventListener('todo:edit', listener)
 
-    return () => {
-      window.removeEventListener('todo:edit', listener)
-    }
-  }, [])
-
-  useEffect(() => {
-
-    setData({
-      ...data,
-      goal: goalIndex,
-      goal_id: goal?.id
-    })
-  }, [goal])
-  const togglePriority = () => {
-    const current = data.priority - 1
-    const index = current < ( priorities.length - 1) ? current + 1 : 0
-    console.log('prority', index + 1)
-    setData({
-      ...data,
-      priority: index + 1
-    })
   }
-
-  function open() {
-    setIsOpen(true)
-  }
-
-  function close() {
-    setIsOpen(false)
-  }
-
-  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    post(route('todo.store'))
-  }
+  const onSubmit = () => {}
 
   return (
     <>
@@ -112,22 +70,25 @@ function TodoModal({ goals, todo, priorities, clients }: Props) {
               >
                 <DialogPanel className="z-20 w-11/12 sm:1/2 rounded-xl bg-white text-black p-6 ">
                   <DialogTitle as="h3" className="text-base/7 font-medium ">
-                    Agregar nueva actividad
+                    Agregar cliente
                   </DialogTitle>
 
                   <form onSubmit={onSubmit} className='space-y-2'>
                     <fieldset className='flex flex-row justify-center items-center space-x-1'>
-                      <Task className="" />
                       <ReactTextareaAutosize name='activity' onChange={e => setData({...data, activity: e.target.value })} className='border-none border-b border-b-gray-600 p-2 w-full outline-none appearance-none focus:outline-yellow-100' placeholder='Que tienes que hacer?' data-autofocus />
                         {errors?.activity && (<p className='text-red-500 mb-4 -mt-2 self-stretch'>{errors?.activity}</p>)}
                     </fieldset>
-                    <fieldset className='pl-3'>
-                      <button type='button' accessKey='o' className='p-2' onClick={toggleObjective}>{ goal?.name }</button>
-                      <button type='button' accessKey='o' className='p-2' onClick={togglePriority}>{ priorities[data.priority - 1] }</button>
-                    </fieldset>
-                    <fieldset className='pl-3 flex flew-row'>
-                      <Combo clients={clients} />
-                                            <button>nuevo cliente</button>
+                    <fieldset className='pl-3 flex flex-row items-center space-x-3'>
+                      <button type='button' accessKey='o' className='p-2 shadow' onClick={toggleObjective}>{ goal?.name }</button>
+                      <button type='button' accessKey='o' className='p-2 shadow' onClick={togglePriority}>{ priorities[data.priority - 1] }</button>
+
+                    <motion.div animate={{x: width}} transition={{ type: "spring" }} className='w-4 h-6 bg-gray-300 rounded'
+                      onPointerMove={handleColorChange}
+                      onPointerDown={() => setDragging(true)}
+                      onLostPointerCapture={() => setDragging(false)}
+                    >
+                    </motion.div>
+
                     </fieldset>
                     <div className="mt-4">
                       <Button
@@ -147,6 +108,7 @@ function TodoModal({ goals, todo, priorities, clients }: Props) {
       </Transition>
     </>
   )
+
 }
 
-export default TodoModal
+export default ClientModal;
