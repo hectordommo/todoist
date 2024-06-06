@@ -12,5 +12,8 @@ class ClientController extends Controller
         $client->name = $request->name;
         $client->color = $request->name;
         $client->priority = $request->name;
+        $client->save();
+
+        return back();
     }
 }

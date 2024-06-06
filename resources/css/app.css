@@ -6,7 +6,10 @@
     @apply outline outline-yellow-300;
 }
 .btn {
-    @apply rounded focus:outline-yellow-300 px-4 py-1;
+    @apply rounded focus:outline-amber-600 px-4 py-1;
+}
+textarea {
+    @apply bg-gray-50 rounded;
 }
 
 .btn.primary {

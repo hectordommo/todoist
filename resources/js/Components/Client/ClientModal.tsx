@@ -19,11 +19,20 @@ const ClientModal = ({goals, priorities}) => {
   const { priority, togglePriority } = usePriorityCarouselSelector( priorities)
   let [color, setColor] = useState(parseColor(`hsl(${hue}, 100%, 50%)`));
   const [width, setWidth] = useState(10)
-  const { errors, setData, data } = useForm({
+  const { errors, setData, data, post } = useForm({
     name: '',
     priority: priority,
     color: color.toString('hex')
   })
+  useEffect(() => {
+    const handler = () =>setIsOpen(true)
+    window.addEventListener('client:modal:open', handler)
+
+    return () => {
+      window.removeEventListener('client:modal:open', handler)
+    }
+  }, [])
+
   const handleColorChange = (e) => {
     if(isDragging) {
       if(initialX === null)
@@ -34,11 +43,13 @@ const ClientModal = ({goals, priorities}) => {
         setDelta( e.screenX - initialX)
         console.log('draggin', width)
       }
-
     }
-
   }
-  const onSubmit = () => {}
+  const onSubmit = async (ev) => {
+    ev.preventDefault()
+    await post(route('client.store'))
+    setIsOpen(false)
+  }
 
   return (
     <>
@@ -54,9 +65,9 @@ const ClientModal = ({goals, priorities}) => {
       </Button>
 
       <Transition appear show={isOpen}>
-        <Dialog as="div" className="relative z-10 focus:outline-none" onClose={close} >
+        <Dialog as="div" className="relative z-10 focus:outline-none" onClose={() => setIsOpen(false)} >
 
-          <div className="fixed inset-0 bg-black/30 z-0 backdrop-blur-md" aria-hidden="true" />
+          <div className="fixed inset-0 bg-black/30 z-0 backdrop-blur-md" aria-hidden="true" onClick={() => setIsOpen(false)} />
 
           <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4">
@@ -70,17 +81,17 @@ const ClientModal = ({goals, priorities}) => {
               >
                 <DialogPanel className="z-20 w-11/12 sm:1/2 rounded-xl bg-white text-black p-6 ">
                   <DialogTitle as="h3" className="text-base/7 font-medium ">
-                    Agregar cliente
+                    Información de tu cliente
                   </DialogTitle>
 
                   <form onSubmit={onSubmit} className='space-y-2'>
                     <fieldset className='flex flex-row justify-center items-center space-x-1'>
-                      <ReactTextareaAutosize name='activity' onChange={e => setData({...data, activity: e.target.value })} className='border-none border-b border-b-gray-600 p-2 w-full outline-none appearance-none focus:outline-yellow-100' placeholder='Que tienes que hacer?' data-autofocus />
+                      <ReactTextareaAutosize name='activity' onChange={e => setData({...data, activity: e.target.value })} className='border-none border-b border-b-gray-600 p-2 w-full outline-none appearance-none focus:outline-yellow-100' placeholder='Nombre del cliente' data-autofocus />
                         {errors?.activity && (<p className='text-red-500 mb-4 -mt-2 self-stretch'>{errors?.activity}</p>)}
                     </fieldset>
                     <fieldset className='pl-3 flex flex-row items-center space-x-3'>
                       <button type='button' accessKey='o' className='p-2 shadow' onClick={toggleObjective}>{ goal?.name }</button>
-                      <button type='button' accessKey='o' className='p-2 shadow' onClick={togglePriority}>{ priorities[data.priority - 1] }</button>
+                      <button type='button' accessKey='i' className='p-2 shadow' onClick={togglePriority}>{ priorities[data.priority - 1] }</button>
 
                     <motion.div animate={{x: width}} transition={{ type: "spring" }} className='w-4 h-6 bg-gray-300 rounded'
                       onPointerMove={handleColorChange}
@@ -90,7 +101,8 @@ const ClientModal = ({goals, priorities}) => {
                     </motion.div>
 
                     </fieldset>
-                    <div className="mt-4">
+
+                    <div className="mt-8">
                       <Button
                         className="outline outline-white focus:outline-green-500 inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
                         type="submit"

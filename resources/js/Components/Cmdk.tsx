@@ -50,10 +50,10 @@ const Cmdk = () => {
             onClick: () => dispatchEvent( new Event('client:modal:open'))
           },
           {
-            id: "settings",
-            children: "Settings",
-            icon: "CogIcon",
-            href: "#",
+            id: "goal-create",
+            children: "Crear nuevo objetivo",
+            icon: "FaceSmileIcon",
+            onClick: () => dispatchEvent( new Event('goal:modal:open'))
           },
           {
             id: "projects",

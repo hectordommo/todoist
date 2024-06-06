@@ -16,7 +16,7 @@ export default function Combo({ clients, value }:Props) {
   const filteredPeople =
     query === ''
       ? clients
-      : clients.filter((person) => {
+      : clients.filter((person:Client) => {
         return person.name.toLowerCase().includes(query.toLowerCase())
       })
 
@@ -55,13 +55,6 @@ export default function Combo({ clients, value }:Props) {
               <div className="text-sm/6 ">{person.name}</div>
             </ComboboxOption>
           ))}
-          <ComboboxOption
-            value={null}
-            className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-blue-500/10"
-          >
-            <CircleCheckBig className="invisible size-4 fill-black group-data-[selected]:visible" />
-            Nuevo cliente
-          </ComboboxOption>
         </ComboboxOptions>
       </Transition>
     </Combobox>

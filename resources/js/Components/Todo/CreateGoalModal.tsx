@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent, useEffect } from 'react'
 import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useState } from 'react'
 import { useForm } from '@inertiajs/react'
@@ -10,6 +10,14 @@ type Props = {
 function CreateGoalModal(props:Props) {
   // The open/closed state lives outside of the `Dialog` and is managed by you
   let [isOpen, setIsOpen] = useState(props.open)
+  useEffect(() => {
+    const handler = () =>setIsOpen(true)
+    window.addEventListener('goal:modal:open', handler)
+
+    return () => {
+      window.removeEventListener('goal:modal:open', handler)
+    }
+  }, [])
   const { data, setData, post } = useForm({
     name: '',
     priority: 2
@@ -40,7 +48,7 @@ function CreateGoalModal(props:Props) {
             <Description>Agrega una nueva meta para tu vida.</Description>
             <form onSubmit={handleSubmit} className='space-y-4'>
               <fieldset>
-              <input value={data.name} onChange={(e:InputEvent) => setData({...data,'name': e.target.value})} className='bg-white border rounded border-gray-100 w-full' placeholder='Nombre' />
+              <input value={data.name} onChange={(e:InputEvent) => setData({...data,'name': e.target.value})} className='bg-white border rounded border-gray-100 w-full' placeholder='Nombre' data-autofocus />
               </fieldset>
 
               <div className='flex justify-end'>

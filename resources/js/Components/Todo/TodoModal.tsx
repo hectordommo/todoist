@@ -5,13 +5,14 @@ import { useState } from 'react'
 import ReactTextareaAutosize from 'react-textarea-autosize'
 import Task from '../Icons/Task'
 import { useForm } from '@inertiajs/react'
-import { Goal, Todo } from '../../types'
+import { Client, Goal, Todo } from '../../types'
 import { useHotkeys } from 'react-hotkeys-hook'
 import Combo from '../UI/Combobox'
 import { useGoalCarouselSelector } from '../../hooks/useGoals'
 
 type Props = {
   goals: Goal[]
+  clients: Client[]
   todo: Todo | null
   priorities: string[]
 }
@@ -21,7 +22,6 @@ function clamp(number, min, max) {
 
 function TodoModal({ goals, todo, priorities, clients }: Props) {
   const { goal, toggleObjective, index: goalIndex } = useGoalCarouselSelector(goals)
-  const [createClient , setCreateClient ] = useState(false)
   let [isOpen, setIsOpen] = useState(false)
   const { data, setData, post, errors } = useForm({
     activity: '',
@@ -34,7 +34,7 @@ function TodoModal({ goals, todo, priorities, clients }: Props) {
   })
   useHotkeys('alt + n', () => setIsOpen(true))
 
-  useEffect((l) => {
+  useEffect(() => {
     const listener = (ev) => {
       console.log(ev)
       if(ev.type == 'todo:edit') {
@@ -127,7 +127,6 @@ function TodoModal({ goals, todo, priorities, clients }: Props) {
                     </fieldset>
                     <fieldset className='pl-3 flex flew-row'>
                       <Combo clients={clients} />
-                                            <button>nuevo cliente</button>
                     </fieldset>
                     <div className="mt-4">
                       <Button

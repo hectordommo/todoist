@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AppController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\GoalsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TodoController;
@@ -28,6 +29,7 @@ Route::middleware('auth')->group(function () {
 Route::group([], function () {
     Route::post('/goals', [GoalsController::class, 'store'])->name('goals.store');
     Route::post('/todo', [TodoController::class, 'store'])->name('todo.store');
+    Route::post('/client', [ClientController::class, 'store'])->name('client.store');
 
 })->middleware('auth');
 
