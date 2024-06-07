@@ -23,10 +23,9 @@ export default function Dashboard({ auth, goals, todos, clients }: Props) {
     >
       <Head title="Dashboard" />
       <CreateGoalModal open={false} />
-      <ClientModal goals={goals} priorities={priorities} />
       <Cmdk />
 
-      <div className="pt-4">
+      <div className="pt-4 standalone:pt-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-row justify-evenly overflow-x-scroll">
           <ul className='flex flex-row flex-nowrap  divide-x divide-stone-200'>
             {
@@ -34,6 +33,7 @@ export default function Dashboard({ auth, goals, todos, clients }: Props) {
             }
           </ul>
           <TodoModal goals={goals} todo={store.todo} priorities={priorities} clients={clients} />
+        <ClientModal goals={goals} priorities={priorities} />
         </div>
 
         <div className='bg-white my-4'>

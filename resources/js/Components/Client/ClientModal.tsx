@@ -7,6 +7,7 @@ import { useGoalCarouselSelector } from '../../hooks/useGoals'
 import { usePriorityCarouselSelector } from '../../hooks/usePriority'
 import { parseColor } from '@react-spectrum/color'
 import { motion, useMotionValue } from 'framer-motion'
+import { UserPlusIcon } from 'lucide-react'
 
 
 const ClientModal = ({goals, priorities}) => {
@@ -32,6 +33,12 @@ const ClientModal = ({goals, priorities}) => {
       window.removeEventListener('client:modal:open', handler)
     }
   }, [])
+  useEffect(() => {
+    setData({
+      ...data,
+      priority: priority
+    })
+  }, [priority])
 
   const handleColorChange = (e) => {
     if(isDragging) {
@@ -54,14 +61,12 @@ const ClientModal = ({goals, priorities}) => {
   return (
     <>
       <Button
-        onClick={open}
+        onClick={() => setIsOpen(true)}
         type='button'
         className="flex-shrink-0 w-8 h-8 rounded-full bg-black/20 p-2 font-medium text-white focus:outline-none data-[hover]:bg-black/30 data-[focus]:outline-1 data-[focus]:outline-green-500"
         tabIndex={1}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-        </svg>
+        <UserPlusIcon className='w-4 h-4' />
       </Button>
 
       <Transition appear show={isOpen}>
@@ -86,12 +91,13 @@ const ClientModal = ({goals, priorities}) => {
 
                   <form onSubmit={onSubmit} className='space-y-2'>
                     <fieldset className='flex flex-row justify-center items-center space-x-1'>
-                      <ReactTextareaAutosize name='activity' onChange={e => setData({...data, activity: e.target.value })} className='border-none border-b border-b-gray-600 p-2 w-full outline-none appearance-none focus:outline-yellow-100' placeholder='Nombre del cliente' data-autofocus />
-                        {errors?.activity && (<p className='text-red-500 mb-4 -mt-2 self-stretch'>{errors?.activity}</p>)}
+                      <ReactTextareaAutosize name='name' onChange={e => setData({...data, name: e.target.value })}
+                        className='border-none border-b border-b-gray-600 p-2 w-full outline-none appearance-none focus:outline-yellow-100' placeholder='Nombre del cliente'
+                        data-autofocus />
+                        {errors?.name && (<p className='text-red-500 mb-4 -mt-2 self-stretch'>{errors?.name}</p>)}
                     </fieldset>
                     <fieldset className='pl-3 flex flex-row items-center space-x-3'>
-                      <button type='button' accessKey='o' className='p-2 shadow' onClick={toggleObjective}>{ goal?.name }</button>
-                      <button type='button' accessKey='i' className='p-2 shadow' onClick={togglePriority}>{ priorities[data.priority - 1] }</button>
+                      <button type='button' accessKey='i' className='p-2 shadow' onClick={togglePriority}>{ data.priority }</button>
 
                     <motion.div animate={{x: width}} transition={{ type: "spring" }} className='w-4 h-6 bg-gray-300 rounded'
                       onPointerMove={handleColorChange}

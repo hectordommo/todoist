@@ -10,8 +10,8 @@ class ClientController extends Controller
     function store( Request $request) {
         $client = new Client();
         $client->name = $request->name;
-        $client->color = $request->name;
-        $client->priority = $request->name;
+        $client->color = $request->color;
+        $client->priority = $request->priority;
         $client->save();
 
         return back();
