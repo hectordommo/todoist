@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import type { Auth, Client, Goal, Todo } from '../types';
@@ -16,7 +16,9 @@ type Props = {
 }
 export default function Dashboard({ auth, goals, todos, clients }: Props) {
   const priorities = ['Milagro', 'Prioridad', 'Algún día', 'Delegar']
+  const [selected, setSelected] = useState(null)
   const store = useTodosIU()
+  console.log('selected: ',selected)
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -39,13 +41,13 @@ export default function Dashboard({ auth, goals, todos, clients }: Props) {
         <div className='bg-white my-4'>
           <div className='mx-auto max-w-7xl p-4 space-y-4'>
             <h3 className='text-orange-700'>Milagro</h3>
-            <TodosList todos={todos.filter(f => f.priority == 1)} />
+            <TodosList todos={todos.filter(f => f.priority == 1)} setSelected={setSelected} selected={selected} />
             <h3 className='text-lime-700'>Urgente</h3>
-            <TodosList todos={todos.filter(f => f.priority == 2)} />
+            <TodosList todos={todos.filter(f => f.priority == 2)} setSelected={setSelected} selected={selected} />
             <h3  className='text-stone-700'>Importante</h3>
-            <TodosList todos={todos.filter(f => f.priority == 3)} />
+            <TodosList todos={todos.filter(f => f.priority == 3)} setSelected={setSelected} selected={selected} />
             <h3 className='text-gray-700'>Delegar</h3>
-            <TodosList todos={todos.filter(f => f.priority == 4)} />
+            <TodosList todos={todos.filter(f => f.priority == 4)} setSelected={setSelected} selected={selected} />
           </div>
         </div>
       </div>
