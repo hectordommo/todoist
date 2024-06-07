@@ -30,7 +30,8 @@ function TodoModal({ goals, todo, priorities, clients }: Props) {
     effort: 1,
     goal_id: null,
     client_id: null,
-    priority: 3
+    priority: 3,
+    value: 2
   })
   useHotkeys('alt + n', () => setIsOpen(true))
 
@@ -122,11 +123,17 @@ function TodoModal({ goals, todo, priorities, clients }: Props) {
                         {errors?.activity && (<p className='text-red-500 mb-4 -mt-2 self-stretch'>{errors?.activity}</p>)}
                     </fieldset>
                     <fieldset className='pl-3'>
-                      <button type='button' accessKey='o' className='p-2' onClick={toggleObjective}>{ goal?.name }</button>
+                      <button type='button' accessKey='o' className='p-2' onClick={toggleObjective}>{ goal !== undefined ? goal?.name : 'Ninguno objetivo' }</button>
                       <button type='button' accessKey='o' className='p-2' onClick={togglePriority}>{ priorities[data.priority - 1] }</button>
                     </fieldset>
                     <fieldset className='pl-3 flex flew-row'>
-                      <Combo clients={clients} />
+                        <select className='rounded' value={data.client_id} onChange={(e) => setData({...data, client_id: e.target.value})}>
+                          <option>Ninguno</option>
+
+                        {
+                          clients.map((client:Client) => (<option key={client.id} value={client.id}>{client.name}</option>))
+                        }
+                        </select>
                     </fieldset>
                     <div className="mt-4">
                       <Button

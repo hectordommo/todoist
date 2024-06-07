@@ -41,7 +41,7 @@ const TodosList = ({ todos }: Props) => {
       todos.map((todo, index) => (
         <article onClick={()=> onEditTodo(todo)} data-todo={todo} key={`t-${todo.id}`} className="todo-focusable flex flex-row rounded border-b outline outline-white focus:outline-yellow-300 transform transition-transform duration-300 hover:-translate-y-1 cursor-pointer" tabIndex={0}>
           <span className='flex-1'>{todo.activity}</span>
-          <span className='text-sm p-1 rounded-lg'>#{todo.goal.name}</span>
+          <span className='text-sm p-1 rounded-lg'>#{todo.goal?.name}</span>
           <span className='w-4 text-xs bg-stone-200 text-stone-500 px-1 rounded flex items-center'>{todo.priority}</span>
         </article>))
     }

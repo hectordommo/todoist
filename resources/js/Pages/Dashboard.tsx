@@ -15,7 +15,7 @@ type Props = {
   clients: Client
 }
 export default function Dashboard({ auth, goals, todos, clients }: Props) {
-  const priorities = ['Milagro', 'Urgente', 'Algún día', 'Delegar']
+  const priorities = ['Milagro', 'Prioridad', 'Algún día', 'Delegar']
   const store = useTodosIU()
   return (
     <AuthenticatedLayout

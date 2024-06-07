@@ -11,7 +11,7 @@ export const useGoalCarouselSelector = (goals:Goal[]) => {
   const toggleObjective = () => {
     const cindex = index < (goals.length) ? index + 1 : 0
     setIndex( clamp(cindex, 0, (goals.length - 1)) )
-    setGoal( goals[clamp(cindex, 0, (goals.length - 1))] )
+    setGoal( goals[clamp(cindex, 0, (goals.length))] )
   }
 
   return {

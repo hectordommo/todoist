@@ -19,6 +19,7 @@ export default function Combo({ clients, value }:Props) {
       : clients.filter((person:Client) => {
         return person.name.toLowerCase().includes(query.toLowerCase())
       })
+    console.log('filtered', filteredPeople)
 
   return (
     <Combobox value={selected} onChange={(value) => setSelected(value)}>
@@ -43,7 +44,7 @@ export default function Combo({ clients, value }:Props) {
       >
         <ComboboxOptions
           anchor="bottom"
-          className="w-[var(--input-width)] rounded-xl border border-blue-500/5 bg-black/5 p-1 [--anchor-gap:var(--spacing-1)] empty:hidden"
+          className="w-full rounded-xl border border-blue-500/5 bg-black/5 p-1 gap-4 empty:hidden"
         >
           {filteredPeople.map((person) => (
             <ComboboxOption
@@ -52,7 +53,7 @@ export default function Combo({ clients, value }:Props) {
               className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-black/10"
             >
               <CircleCheckBig className="invisible size-4 fill-black group-data-[selected]:visible" />
-              <div className="text-sm/6 ">{person.name}</div>
+              <div className="text-sm/6 ">{person.name} algo</div>
             </ComboboxOption>
           ))}
         </ComboboxOptions>
