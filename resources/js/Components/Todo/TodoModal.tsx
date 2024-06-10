@@ -36,7 +36,10 @@ function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
   useHotkeys('alt + n', () => setIsOpen(true))
 
   useEffect(()=> {
-    if(todo?.id == undefined) return;
+    if(todo?.id == undefined) {
+      setData({activity: '', description: '', priority: 3});
+      return;
+    }
     console.log('set form goal', todo.goal )
     setGoal(todo.goal)
     setData({...data,
@@ -109,7 +112,7 @@ function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
   return (
     <>
       <Button
-        onClick={open}
+        onClick={() => { open(); setSelected({}) }}
         type='button'
         className="flex-shrink-0 w-8 h-8 rounded-full bg-black/20 p-2 font-medium text-white focus:outline-none data-[hover]:bg-black/30 data-[focus]:outline-1 data-[focus]:outline-green-500"
         tabIndex={1}
