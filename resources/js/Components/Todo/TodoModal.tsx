@@ -102,6 +102,7 @@ function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
     event.preventDefault()
     if(todo?.id === undefined) {
       post(route('todo.store'))
+      close()
     }
     if(todo?.id > 0) {
       put(route('todo.update', todo.id))

@@ -24,9 +24,6 @@ class TodoController extends Controller
         return back()->with('success', 'Task added');
     }
     public function update(Request $request, Todo $todo) {
-        $request->validate([
-            'activity' => 'required'
-        ]);
         $data = $request->except('_token');
         $todo->activity = $request->get('activity', $todo->activity);
         $todo->completed = $request->get('completed', $todo->completed);
@@ -34,7 +31,9 @@ class TodoController extends Controller
         $todo->value = $request->get('value', $todo->value);
         $todo->description = $request->get('description', $todo->description);
         $todo->effort = $request->get('effort', $todo->effort);
-        $todo->goal()->associate($request->goal_id);
+        if($request->has('goal_id')) {
+            $todo->goal()->associate($request->goal_id);
+        }
         $todo->save();
 
         return back()->with('success', 'Task added');

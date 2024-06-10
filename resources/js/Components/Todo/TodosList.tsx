@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Todo } from '../../types'
 import { cn } from '../../utils'
 import Checkbox from '../Checkbox'
+import { router } from '@inertiajs/react'
 
 type Props = {
   todos: Todo[]
@@ -36,6 +37,9 @@ const TodosList = ({ todos, setSelected, selected }: Props) => {
   const onSelect = (todo) => {
     setSelected(todo)
   }
+  const handleCheck = ( todo:Todo, completed:boolean) => {
+    router.put(route('todo.update', todo.id), {completed: completed}, {preserveState: true, preserveScroll: true})
+  }
 
   return (
     <>
@@ -47,7 +51,7 @@ const TodosList = ({ todos, setSelected, selected }: Props) => {
                 {'outline-amber-700': selected?.id == todo.id} )
             }
             tabIndex={0}>
-                        <Checkbox />
+            <Checkbox onChange={()=> handleCheck(todo, !todo.completed)} checked={todo.completed} />
           <span className='flex-1'>{todo.activity}</span>
           <span className='text-sm p-1 rounded-lg'>#{todo.goal?.name}</span>
           <span className='w-4 text-xs bg-stone-200 text-stone-500 px-1 rounded flex items-center'>{todo.value}</span>

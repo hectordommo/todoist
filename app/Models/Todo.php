@@ -25,4 +25,11 @@ class Todo extends Model
     public function project():BelongsTo {
         return $this->belongsTo(Project::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'completed' => 'boolean',
+        ];
+    }
 }
