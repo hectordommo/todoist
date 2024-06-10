@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import type { Auth, Client, Goal, Todo } from '../types';
 import CreateGoalModal from '../Components/Todo/CreateGoalModal';
 import TodoModal from '../Components/Todo/TodoModal';
@@ -8,6 +8,7 @@ import TodosList from '../Components/Todo/TodosList';
 import useTodosIU from '../store/TodosUI';
 import Cmdk from '../Components/Cmdk';
 import ClientModal from '../Components/Client/ClientModal';
+import usePageFocus from '../hooks/usePageFocus';
 type Props = {
   auth: Auth,
   goals: Goal[]
@@ -17,6 +18,11 @@ type Props = {
 export default function Dashboard({ auth, goals, todos, clients }: Props) {
   const priorities = ['Milagro', 'Prioridad', 'Algún día', 'Delegar']
   const [selected, setSelected] = useState(null)
+  const onPageGetsFocus = () => {
+    router.visit('/dashboard', {}, {only: ['clients','todos']})
+    console.log('window focus')
+  }
+  usePageFocus(onPageGetsFocus)
   const store = useTodosIU()
   console.log('selected: ',selected)
   return (
