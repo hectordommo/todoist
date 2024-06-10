@@ -15,19 +15,16 @@ const TodosList = ({ todos, setSelected, selected }: Props) => {
       // Check if the focused element is one you want to deal with
       if (event.target.matches('.todo-focusable')) {
         setFocusedElement(event.target.dataset.todo);
-      } else {
-        setFocusedElement(null);
+        setSelected(event.target.dataset.todo)
       }
     };
 
-    // Add focus and blur event listeners
-    window.addEventListener('focusin', handleFocus);
-    window.addEventListener('focusout', handleFocus);
+    // window.addEventListener('focusin', handleFocus);
+    // window.addEventListener('focusout', handleFocus);
 
-    // Clean up event listeners on component unmount
     return () => {
-      window.removeEventListener('focusin', handleFocus);
-      window.removeEventListener('focusout', handleFocus);
+      // window.removeEventListener('focusin', handleFocus);
+      // window.removeEventListener('focusout', handleFocus);
     };
   }, [])
   const onEditTodo = (todo:Todo) => {
@@ -43,7 +40,7 @@ const TodosList = ({ todos, setSelected, selected }: Props) => {
     <>
     {
       todos.map((todo, index) => (
-        <article onClick={()=> onSelect(todo)} data-todo={todo} key={`t-${todo.id}`}
+        <article onClick={()=> onSelect(todo)} data-todo={todo} key={`t-${todo.id}`} onFocus={() => setSelected( todo)}
             className={
               cn('px-1 py-2',"todo-focusable flex flex-row rounded border-b outline outline-white focus:outline-yellow-300 transform transition-transform duration-300 hover:-translate-y-1 cursor-pointer",
                 {'outline-amber-700': selected?.id == todo.id} )
@@ -51,7 +48,7 @@ const TodosList = ({ todos, setSelected, selected }: Props) => {
             tabIndex={0}>
           <span className='flex-1'>{todo.activity}</span>
           <span className='text-sm p-1 rounded-lg'>#{todo.goal?.name}</span>
-          <span className='w-4 text-xs bg-stone-200 text-stone-500 px-1 rounded flex items-center'>{todo.priority}</span>
+          <span className='w-4 text-xs bg-stone-200 text-stone-500 px-1 rounded flex items-center'>{todo.value}</span>
         </article>))
     }
     </>

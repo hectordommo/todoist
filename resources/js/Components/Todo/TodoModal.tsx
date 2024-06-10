@@ -20,24 +20,38 @@ function clamp(number, min, max) {
   return Math.max(min, Math.min(number, max));
 }
 
-function TodoModal({ goals, todo, priorities, clients }: Props) {
-  const { goal, toggleObjective, index: goalIndex } = useGoalCarouselSelector(goals)
+function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
+  const { goal, setGoal, toggleObjective, index: goalIndex } = useGoalCarouselSelector(goals, todo?.goal_id)
   let [isOpen, setIsOpen] = useState(false)
-  const { data, setData, post, errors } = useForm({
+  const { data, setData, post, errors, put } = useForm(Object.assign( {
     activity: '',
     description: '',
     goal: 0,
     effort: 1,
     goal_id: null,
-    client_id: null,
+    client_id: '',
     priority: 3,
     value: 2
-  })
+  }, todo ))
   useHotkeys('alt + n', () => setIsOpen(true))
+
+  useEffect(()=> {
+    if(todo?.id == undefined) return;
+    console.log('set form goal', todo.goal )
+    setGoal(todo.goal)
+    setData({...data,
+      activity: todo?.activity,
+      description: todo?.description,
+      effort: todo?.effort,
+      goal_id: todo?.goal_id,
+      client_id: todo?.client_id ? todo?.client_id : '',
+      priority: todo?.priority,
+      value: todo?.value,
+    })
+  }, [todo?.id])
 
   useEffect(() => {
     const listener = (ev) => {
-      console.log(ev)
       if(ev.type == 'todo:edit') {
         setIsOpen(true)
       }
@@ -53,17 +67,20 @@ function TodoModal({ goals, todo, priorities, clients }: Props) {
   }, [])
 
   useEffect(() => {
-
-    setData({
-      ...data,
-      goal: goalIndex,
-      goal_id: goal?.id
+    if(goal) {
+      console.log('update goal', goal)
+      setData({
+        ...data,
+        goal: goalIndex,
+        goal_id: goal?.id
     })
+
+    }
   }, [goal])
+
   const togglePriority = () => {
     const current = data.priority - 1
     const index = current < ( priorities.length - 1) ? current + 1 : 0
-    console.log('prority', index + 1)
     setData({
       ...data,
       priority: index + 1
@@ -80,7 +97,13 @@ function TodoModal({ goals, todo, priorities, clients }: Props) {
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    post(route('todo.store'))
+    if(todo?.id === undefined) {
+      post(route('todo.store'))
+    }
+    if(todo?.id > 0) {
+      put(route('todo.update', todo.id))
+      close()
+    }
   }
 
   return (
@@ -119,12 +142,12 @@ function TodoModal({ goals, todo, priorities, clients }: Props) {
                   <form onSubmit={onSubmit} className='space-y-2'>
                     <fieldset className='flex flex-row justify-center items-center space-x-1'>
                       <Task className="" />
-                      <ReactTextareaAutosize name='activity' onChange={e => setData({...data, activity: e.target.value })} className='border-none border-b border-b-gray-600 p-2 w-full outline-none appearance-none focus:outline-yellow-100' placeholder='Que tienes que hacer?' data-autofocus />
+                      <ReactTextareaAutosize value={data.activity} name='activity' onChange={e => setData({...data, activity: e.target.value })} className='border-none border-b border-b-gray-600 p-2 w-full outline-none appearance-none focus:outline-yellow-100' placeholder='Que tienes que hacer?' data-autofocus />
                         {errors?.activity && (<p className='text-red-500 mb-4 -mt-2 self-stretch'>{errors?.activity}</p>)}
                     </fieldset>
-                    <fieldset className='pl-3'>
-                      <button type='button' accessKey='o' className='p-2' onClick={toggleObjective}>{ goal !== undefined ? goal?.name : 'Ninguno objetivo' }</button>
-                      <button type='button' accessKey='o' className='p-2' onClick={togglePriority}>{ priorities[data.priority - 1] }</button>
+                    <fieldset className='pl-3 space-x-4'>
+                      <button type='button' accessKey='o' className='p-2 bg-zinc-100 hover:bg-zinc-300 active:bg-zinc-200 rounded' onClick={toggleObjective}>{ goal ? goal?.name : 'Ninguno objetivo' }</button>
+                      <button type='button' accessKey='o' className='p-2 bg-zinc-100 hover:bg-zinc-300 active:bg-zinc-200 rounded' onClick={togglePriority}>{ priorities[data.priority - 1] }</button>
                     </fieldset>
                     <fieldset className='pl-3 flex flew-row'>
                         <select className='rounded' value={data.client_id} onChange={(e) => setData({...data, client_id: e.target.value})}>
