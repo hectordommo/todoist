@@ -35,7 +35,7 @@ export default function Dashboard({ auth, goals, todos, clients }: Props) {
       <CreateGoalModal open={false} />
       <Cmdk />
 
-      <div className="pt-4 standalone:pt-12">
+      <div className="pt-4 standalone:pt-12 standalone:pb-52">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-row justify-evenly overflow-x-scroll">
           <ul className='flex flex-row flex-nowrap  divide-x divide-stone-200'>
             {

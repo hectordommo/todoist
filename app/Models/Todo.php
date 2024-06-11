@@ -30,6 +30,7 @@ class Todo extends Model
     {
         return [
             'completed' => 'boolean',
+            'completed_at' => 'date'
         ];
     }
 }

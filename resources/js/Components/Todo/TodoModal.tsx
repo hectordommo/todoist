@@ -147,7 +147,7 @@ function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
                   <form onSubmit={onSubmit} className='space-y-2'>
                     <fieldset className='flex flex-row justify-center items-center space-x-1'>
                       <Task className="" />
-                      <ReactTextareaAutosize value={data.activity} name='activity' onChange={e => setData({...data, activity: e.target.value })} className='border-none border-b border-b-gray-600 p-2 w-full outline-none appearance-none focus:outline-yellow-100' placeholder='Que tienes que hacer?' data-autofocus />
+                      <ReactTextareaAutosize value={data.activity} name='activity' onChange={e => setData({...data, activity: e.target.value })} className='border-none border-b border-b-gray-600 p-2 w-full outline-none appearance-none focus:outline-yellow-100' placeholder='Que tienes que hacer?'  />
                         {errors?.activity && (<p className='text-red-500 mb-4 -mt-2 self-stretch'>{errors?.activity}</p>)}
                     </fieldset>
                     <fieldset className='pl-3 space-x-4'>

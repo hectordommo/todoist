@@ -1,16 +1,29 @@
 // Modal para editar o crear tareas
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button, Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import ReactTextareaAutosize from 'react-textarea-autosize'
 import { useForm } from '@inertiajs/react'
 import { useGoalCarouselSelector } from '../../hooks/useGoals'
 import { usePriorityCarouselSelector } from '../../hooks/usePriority'
 import { parseColor } from '@react-spectrum/color'
-import { motion, useMotionValue } from 'framer-motion'
+import { motion, useMotionValue, useTransform } from 'framer-motion'
 import { UserPlusIcon } from 'lucide-react'
 
+const getGradient = (saturation, lightness) => {
+  let items = []
+  for(let i = 1; i <= 36; i++) {
+    let gradient = Math.ceil(((i * 10) * 100) / 360)
+    let string = ` hsl(${(i * 10)}, ${lightness}%, ${saturation}%) ${gradient}%`
+    items.push(string)
+  }
+  return '90deg, ' + items.join(',');
+}
 
 const ClientModal = ({goals, priorities}) => {
+  const colorPickerHolder = useRef(null)
+  const handleRef = useRef<HTMLDivElement>()
+  const progressBarRef = useRef<HTMLDivElement>()
+  const handleSize = 3 * 16;
   const [isOpen, setIsOpen] = useState(false)
   const [isDragging, setDragging] = useState(false)
   const [delta, setDelta] = useState(0)
@@ -19,7 +32,11 @@ const ClientModal = ({goals, priorities}) => {
   const { goal, toggleObjective } = useGoalCarouselSelector(goals)
   const { priority, togglePriority } = usePriorityCarouselSelector( priorities)
   let [color, setColor] = useState(parseColor(`hsl(${hue}, 100%, 50%)`));
-  const [width, setWidth] = useState(10)
+  let [background, setBackground] = useState(getGradient(100,50))
+  const [width, setWidth] = useState('100%')
+  const x = useMotionValue(0)
+  console.log(background)
+
   const { errors, setData, data, post } = useForm({
     name: '',
     priority: priority,
@@ -34,6 +51,10 @@ const ClientModal = ({goals, priorities}) => {
     }
   }, [])
   useEffect(() => {
+    setColor(parseColor(`hsl(${hue}, 100%, 50%)`))
+    setData({...data, color: color.toString('hex')})
+  }, [hue])
+  useEffect(() => {
     setData({
       ...data,
       priority: priority
@@ -44,12 +65,24 @@ const ClientModal = ({goals, priorities}) => {
     if(isDragging) {
       if(initialX === null)
         setInitialX(e.screenX)
+
       if(initialX !== null) {
-        let nw = Math.ceil(e.screenX) //.toString() +'px'
-        setWidth(nw)
-        setDelta( e.screenX - initialX)
-        console.log('draggin', width)
+        let { right } = e.currentTarget.getBoundingClientRect()
+        let overflow = right - e.clientX
+        console.log('ov',right, e.clientX, overflow)
+        x.set(overflow)
+        console.log('draggin', ((300 + overflow) / 300))
       }
+    }
+  }
+  const handleDrag = () => {
+    if(handleRef.current && progressBarRef.current) {
+      const handleBounds = handleRef.current?.getBoundingClientRect()
+      const middleOfHandle = handleBounds?.x + handleBounds?.width / 2
+      const progressBarBounds = progressBarRef.current.getBoundingClientRect()
+      const newProgress = (middleOfHandle - progressBarBounds.x) / progressBarBounds.width
+      setHue( newProgress * (250 - 1));
+      console.log(newProgress)
     }
   }
   const onSubmit = async (ev) => {
@@ -99,16 +132,19 @@ const ClientModal = ({goals, priorities}) => {
                     <fieldset className='pl-3 flex flex-row items-center space-x-3'>
                       <button type='button' accessKey='i' className='p-2 shadow' onClick={togglePriority}>{ data.priority }</button>
 
-                    <motion.div animate={{x: width}} transition={{ type: "spring" }} className='w-4 h-6 bg-gray-300 rounded'
-                      onPointerMove={handleColorChange}
-                      onPointerDown={() => setDragging(true)}
-                      onLostPointerCapture={() => setDragging(false)}
+                    <motion.div style={{width: '100%', background: `linear-gradient(${background}) `
+                      }} transition={{ type: "easeOut" }} className='w-4 h-6 bg-gray-300 rounded relative'
+                        tabIndex={0}
                     >
+                        <div ref={progressBarRef} className='absolute h-1 bg-blue-300' style={{left: handleSize / 2, right: handleSize / 2}} data-name="slider-progress"/>
+                        <div ref={colorPickerHolder}>
+                          <motion.div ref={handleRef} style={{left: handleSize / 2, width: handleSize, backgroundColor: color}} className='w-10 h-6 border border-white relative' dragElastic={0} onDrag={handleDrag} drag="x" dragConstraints={colorPickerHolder}></motion.div>
+                        </div>
                     </motion.div>
 
                     </fieldset>
 
-                    <div className="mt-8">
+                    <div className="mt-8 flex justify-end">
                       <Button
                         className="outline outline-white focus:outline-green-500 inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
                         type="submit"
