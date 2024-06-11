@@ -10,19 +10,6 @@ import { motion, useMotionValue, useTransform } from 'framer-motion'
 import { UserPlusIcon } from 'lucide-react'
 
 const getGradient = (saturation, lightness) => {
-//   return `linear-gradient(
-//   45deg,
-//   hsl(240deg 100% 20%) 0%,
-//   hsl(289deg 100% 21%) 11%,
-//   hsl(315deg 100% 27%) 22%,
-//   hsl(329deg 100% 36%) 33%,
-//   hsl(337deg 100% 43%) 44%,
-//   hsl(357deg 91% 59%) 56%,
-//   hsl(17deg 100% 59%) 67%,
-//   hsl(34deg 100% 53%) 78%,
-//   hsl(45deg 100% 50%) 89%,
-//   hsl(55deg 100% 50%) 100%
-// )`;
   let items = []
   for(let i = 0; i <= 36; i++) {
     let gradient = Math.ceil(((i * 10) * 100) / 360)
@@ -37,7 +24,7 @@ const ClientModal = ({goals, priorities}) => {
   const handleRef = useRef<HTMLDivElement>()
   const progressBarRef = useRef<HTMLDivElement>()
   const handleSize = 3 * 16;
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
   const [isDragging, setDragging] = useState(false)
   const [delta, setDelta] = useState(0)
   const [hue, setHue] = useState(50)
@@ -48,7 +35,6 @@ const ClientModal = ({goals, priorities}) => {
   let [background, setBackground] = useState(getGradient(100,50))
   const [width, setWidth] = useState('100%')
   const x = useMotionValue(0)
-  console.log(background)
 
   const { errors, setData, data, post } = useForm({
     name: '',
@@ -73,6 +59,7 @@ const ClientModal = ({goals, priorities}) => {
       priority: priority
     })
   }, [priority])
+  const handleX = useMotionValue(0)
 
   const handleDrag = () => {
     if(handleRef.current && progressBarRef.current) {
@@ -80,10 +67,17 @@ const ClientModal = ({goals, priorities}) => {
       const middleOfHandle = handleBounds?.x + handleBounds?.width / 2
       const progressBarBounds = progressBarRef.current.getBoundingClientRect()
       const newProgress = (middleOfHandle - progressBarBounds.x) / progressBarBounds.width
-      setHue( newProgress * (360 - 1));
-      console.log(newProgress)
+      setHue(Math.ceil (newProgress * (360 - 1)));
+      console.log( Math.ceil (newProgress * (360 - 1)))
     }
   }
+  useEffect(() => {
+    if(progressBarRef.current){
+      let newProgress = hue / (0-360)
+      const progressBarBounds = progressBarRef.current.getBoundingClientRect()
+      handleX.set( newProgress * progressBarBounds.width)
+    }
+  }, [hue])
   const onSubmit = async (ev) => {
     ev.preventDefault()
     await post(route('client.store'))
@@ -136,7 +130,7 @@ const ClientModal = ({goals, priorities}) => {
                     >
                         <div ref={progressBarRef} className='absolute h-1 ' style={{left: handleSize / 2, right: handleSize / 2}} data-name="slider-progress"/>
                         <div ref={colorPickerHolder}>
-                          <motion.div ref={handleRef} style={{left: handleSize / 2, width: handleSize, backgroundColor: color}} className='w-10 h-6 border border-white relative' dragElastic={0} onDrag={handleDrag} drag="x" dragConstraints={colorPickerHolder}></motion.div>
+                          <motion.div ref={handleRef} style={{width: handleSize, backgroundColor: color, x: handleX}} className='w-10 h-6 border border-white relative cursor-pointer' dragElastic={0} onDrag={handleDrag} drag="x" dragConstraints={colorPickerHolder}></motion.div>
                         </div>
                     </motion.div>
 
