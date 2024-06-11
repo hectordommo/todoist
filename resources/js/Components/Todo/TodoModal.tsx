@@ -34,6 +34,7 @@ function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
     value: 2
   }, todo ))
   useHotkeys('alt + n', () => setIsOpen(true))
+  useHotkeys('e', () => setIsOpen(true))
 
   useEffect(()=> {
     if(todo?.id == undefined) {

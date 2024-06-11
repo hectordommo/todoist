@@ -19,6 +19,9 @@ class TodoController extends Controller
         $todo->description = $request->get('description', '');
         $todo->effort = $request->get('effort', 1);
         $todo->goal()->associate($request->goal_id);
+        if($request->client_id)
+        $todo->client()->associate($request->client_id);
+
         $todo->save();
 
         return back()->with('success', 'Task added');
@@ -34,6 +37,10 @@ class TodoController extends Controller
         if($request->has('goal_id')) {
             $todo->goal()->associate($request->goal_id);
         }
+        if($request->has('client_id')) {
+            $todo->client()->associate($request->client_id);
+        }
+
         $todo->save();
 
         return back()->with('success', 'Task added');
