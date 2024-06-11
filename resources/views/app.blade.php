@@ -59,7 +59,7 @@
 <link rel="apple-touch-startup-image" href="/pwa/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
 
     </head>
-    <body class="font-sans antialiased dark:bg-slate-800">
+    <body class="font-sans antialiased bg-slate-50 dark:bg-slate-800">
         @inertia
     </body>
 </html>
