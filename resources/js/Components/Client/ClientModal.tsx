@@ -129,7 +129,7 @@ const ClientModal = ({goals, priorities}) => {
                     >
                         <div ref={progressBarRef} className='absolute h-1 ' style={{left: handleSize / 2, right: handleSize / 2}} data-name="slider-progress"/>
                         <div ref={colorPickerHolder}>
-                          <motion.div ref={handleRef} style={{width: handleSize, backgroundColor: color, x: handleX}} className='w-10 h-6 border border-white relative cursor-pointer' dragElastic={0} onDrag={handleDrag} drag="x" dragConstraints={colorPickerHolder}></motion.div>
+                          <motion.div ref={handleRef} style={{width: handleSize, backgroundColor: color, x: handleX}} className='translate-x-0 w-10 h-6 border border-white relative cursor-pointer' dragElastic={0} onDrag={handleDrag} drag="x" dragConstraints={colorPickerHolder}></motion.div>
                         </div>
                     </motion.div>
 
