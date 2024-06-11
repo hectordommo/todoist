@@ -24,16 +24,11 @@ const ClientModal = ({goals, priorities}) => {
   const handleRef = useRef<HTMLDivElement>()
   const progressBarRef = useRef<HTMLDivElement>()
   const handleSize = 3 * 16;
-  const [isOpen, setIsOpen] = useState(true)
-  const [isDragging, setDragging] = useState(false)
-  const [delta, setDelta] = useState(0)
+  const [isOpen, setIsOpen] = useState(false)
   const [hue, setHue] = useState(50)
-  const [initialX, setInitialX] = useState<number |null>(null)
-  const { goal, toggleObjective } = useGoalCarouselSelector(goals)
   const { priority, togglePriority } = usePriorityCarouselSelector( priorities)
   let [color, setColor] = useState(parseColor(`hsl(${hue}, 100%, 50%)`));
-  let [background, setBackground] = useState(getGradient(100,50))
-  const [width, setWidth] = useState('100%')
+  let [background, _] = useState(getGradient(100,50))
   const x = useMotionValue(0)
 
   const { errors, setData, data, post } = useForm({

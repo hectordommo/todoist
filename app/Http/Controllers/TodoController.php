@@ -40,6 +40,9 @@ class TodoController extends Controller
         if($request->has('client_id')) {
             $todo->client()->associate($request->client_id);
         }
+        if($request->has('completed') && $request->completed == true) {
+            $todo->completed_at = now();
+        }
 
         $todo->save();
 

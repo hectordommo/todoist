@@ -46,11 +46,11 @@ export default function Dashboard({ auth, goals, todos, clients }: Props) {
           <ClientModal goals={goals} priorities={priorities} />
         </div>
 
-        <div className='bg-white my-4'>
+        <div className='bg-white dark:bg-slate-500 my-4'>
           <div className='mx-auto max-w-7xl p-4 space-y-4'>
-            <h3 className='text-orange-700 font-semibold'>Milagro</h3>
+            <h3 className='dark:text-orange-400 text-orange-700 font-semibold'>Milagro</h3>
             <TodosList todos={todos.filter(f => f.priority == 1)} setSelected={setSelected} selected={selected} />
-            <h3 className='text-lime-700 font-semibold'>Prioridad</h3>
+            <h3 className='dark:text-lime-400 text-lime-700 font-semibold'>Prioridad</h3>
             <TodosList todos={todos.filter(f => f.priority == 2)} setSelected={setSelected} selected={selected} />
             <h3 className='text-stone-700 font-semibold'>Algún día</h3>
             <TodosList todos={todos.filter(f => f.priority == 3)} setSelected={setSelected} selected={selected} />
