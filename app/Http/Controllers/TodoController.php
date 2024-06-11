@@ -42,6 +42,8 @@ class TodoController extends Controller
         }
         if($request->has('completed') && $request->completed == true) {
             $todo->completed_at = now();
+        }else if( $todo->completed_at != null) {
+            $todo->completed_at = null;
         }
 
         $todo->save();
