@@ -68,7 +68,6 @@ const ClientModal = ({goals, priorities}) => {
       const progressBarBounds = progressBarRef.current.getBoundingClientRect()
       const newProgress = (middleOfHandle - progressBarBounds.x) / progressBarBounds.width
       setHue(Math.ceil (newProgress * (360 - 1)));
-      console.log( Math.ceil (newProgress * (360 - 1)))
     }
   }
   useEffect(() => {
