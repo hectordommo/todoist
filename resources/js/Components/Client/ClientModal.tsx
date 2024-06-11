@@ -13,7 +13,7 @@ const getGradient = (saturation, lightness) => {
   let items = []
   for(let i = 1; i <= 36; i++) {
     let gradient = Math.ceil(((i * 10) * 100) / 360)
-    let string = ` hsl(${(i * 10)}, ${lightness}%, ${saturation}%) ${gradient}%`
+    let string = ` hsl(${(i * 10)}deg ${lightness}% ${saturation}%) ${gradient}%`
     items.push(string)
   }
   return '90deg, ' + items.join(',');
