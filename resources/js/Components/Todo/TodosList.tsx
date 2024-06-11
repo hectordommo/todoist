@@ -36,6 +36,10 @@ const TodosList = ({ todos, setSelected, selected }: Props) => {
   }
   const onSelect = (todo) => {
     setSelected(todo)
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if(isMobile) {
+      dispatchEvent(new Event('todo:edit'));
+    }
   }
   const handleCheck = ( todo:Todo, completed:boolean) => {
     router.put(route('todo.update', todo.id), {completed: completed}, {preserveState: true, preserveScroll: true})
