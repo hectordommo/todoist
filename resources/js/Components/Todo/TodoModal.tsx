@@ -75,7 +75,7 @@ function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
       setData({
         ...data,
         goal: goalIndex,
-        goal_id: goal?.id
+        goal_id: goal?.id ? goal.id : ''
     })
 
     }
