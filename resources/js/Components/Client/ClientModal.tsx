@@ -10,13 +10,26 @@ import { motion, useMotionValue, useTransform } from 'framer-motion'
 import { UserPlusIcon } from 'lucide-react'
 
 const getGradient = (saturation, lightness) => {
+//   return `linear-gradient(
+//   45deg,
+//   hsl(240deg 100% 20%) 0%,
+//   hsl(289deg 100% 21%) 11%,
+//   hsl(315deg 100% 27%) 22%,
+//   hsl(329deg 100% 36%) 33%,
+//   hsl(337deg 100% 43%) 44%,
+//   hsl(357deg 91% 59%) 56%,
+//   hsl(17deg 100% 59%) 67%,
+//   hsl(34deg 100% 53%) 78%,
+//   hsl(45deg 100% 50%) 89%,
+//   hsl(55deg 100% 50%) 100%
+// )`;
   let items = []
-  for(let i = 1; i <= 36; i++) {
+  for(let i = 0; i <= 36; i++) {
     let gradient = Math.ceil(((i * 10) * 100) / 360)
-    let string = ` hsl(${(i * 10)}deg ${lightness}% ${saturation}%) ${gradient}%`
+    let string = ` hsl(${(i * 10)}deg ${saturation}% ${lightness}%) ${gradient}%`
     items.push(string)
   }
-  return '90deg, ' + items.join(',');
+  return 'linear-gradient( 90deg, ' + items.join(',') + '  )';
 }
 
 const ClientModal = ({goals, priorities}) => {
@@ -61,27 +74,13 @@ const ClientModal = ({goals, priorities}) => {
     })
   }, [priority])
 
-  const handleColorChange = (e) => {
-    if(isDragging) {
-      if(initialX === null)
-        setInitialX(e.screenX)
-
-      if(initialX !== null) {
-        let { right } = e.currentTarget.getBoundingClientRect()
-        let overflow = right - e.clientX
-        console.log('ov',right, e.clientX, overflow)
-        x.set(overflow)
-        console.log('draggin', ((300 + overflow) / 300))
-      }
-    }
-  }
   const handleDrag = () => {
     if(handleRef.current && progressBarRef.current) {
       const handleBounds = handleRef.current?.getBoundingClientRect()
       const middleOfHandle = handleBounds?.x + handleBounds?.width / 2
       const progressBarBounds = progressBarRef.current.getBoundingClientRect()
       const newProgress = (middleOfHandle - progressBarBounds.x) / progressBarBounds.width
-      setHue( newProgress * (250 - 1));
+      setHue( newProgress * (360 - 1));
       console.log(newProgress)
     }
   }
@@ -132,11 +131,10 @@ const ClientModal = ({goals, priorities}) => {
                     <fieldset className='pl-3 flex flex-row items-center space-x-3'>
                       <button type='button' accessKey='i' className='p-2 shadow' onClick={togglePriority}>{ data.priority }</button>
 
-                    <motion.div style={{width: '100%', background: `linear-gradient(${background}) `
-                      }} transition={{ type: "easeOut" }} className='w-4 h-6 bg-gray-300 rounded relative'
+                    <motion.div style={{width: '100%', backgroundImage: background}} transition={{ type: "easeOut" }} className='w-4 h-6 bg-gray-300 rounded relative'
                         tabIndex={0}
                     >
-                        <div ref={progressBarRef} className='absolute h-1 bg-blue-300' style={{left: handleSize / 2, right: handleSize / 2}} data-name="slider-progress"/>
+                        <div ref={progressBarRef} className='absolute h-1 ' style={{left: handleSize / 2, right: handleSize / 2}} data-name="slider-progress"/>
                         <div ref={colorPickerHolder}>
                           <motion.div ref={handleRef} style={{left: handleSize / 2, width: handleSize, backgroundColor: color}} className='w-10 h-6 border border-white relative' dragElastic={0} onDrag={handleDrag} drag="x" dragConstraints={colorPickerHolder}></motion.div>
                         </div>
