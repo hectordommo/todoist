@@ -9,13 +9,15 @@ import useTodosIU from '../store/TodosUI';
 import Cmdk from '../Components/Cmdk';
 import ClientModal from '../Components/Client/ClientModal';
 import usePageFocus from '../hooks/usePageFocus';
+import { Switch } from '@headlessui/react';
 type Props = {
   auth: Auth,
   goals: Goal[]
   todos: Todo
   clients: Client
+  completed: boolean
 }
-export default function Dashboard({ auth, goals, todos, clients }: Props) {
+export default function Dashboard({ auth, goals, todos, clients, completed }: Props) {
   const priorities = ['Milagro', 'Prioridad', 'Algún día', 'Delegar']
   const [selected, _] = useState(null)
   const store = useTodosIU()
@@ -25,6 +27,10 @@ export default function Dashboard({ auth, goals, todos, clients }: Props) {
   }
   const setSelected = (todo) => {
     store.setTodo(todo)
+  }
+  const handleCompleted =(ev) => {
+    console.log(ev)
+    router.visit(route('dashboard', {completed: ev}), {preserveScroll: true})
   }
   usePageFocus(onPageGetsFocus)
   return (
@@ -44,6 +50,12 @@ export default function Dashboard({ auth, goals, todos, clients }: Props) {
           </ul>
           <TodoModal goals={goals} todo={store.todo} priorities={priorities} clients={clients} setSelected={setSelected} />
           <ClientModal goals={goals} priorities={priorities} />
+          <Switch checked={completed} onChange={handleCompleted} className="group relative flex h-7 w-14 cursor-pointer rounded-full bg-gray-400/10 dark:bg-gray-100 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-lime-600/20"
+          ><span
+              aria-hidden="true"
+              className="pointer-events-none inline-block size-5 translate-x-0 rounded-full bg-white ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-7"
+            />
+          </Switch>
         </div>
 
         <div className='bg-white dark:bg-slate-500 my-4'>
