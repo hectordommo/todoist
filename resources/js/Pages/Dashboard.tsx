@@ -22,15 +22,15 @@ export default function Dashboard({ auth, goals, todos, clients, completed }: Pr
   const [selected, _] = useState(null)
   const store = useTodosIU()
   const onPageGetsFocus = () => {
-    router.visit('/dashboard', {}, { only: ['clients', 'todos'] })
+    router.visit('/dashboard', { only: ['clients', 'todos'] })
     console.log('window focus')
   }
   const setSelected = (todo) => {
     store.setTodo(todo)
   }
-  const handleCompleted =(ev) => {
+  const handleCompleted = (ev) => {
     console.log(ev)
-    router.visit(route('dashboard', {completed: ev}), {preserveScroll: true})
+    router.visit(route('dashboard', { completed: ev }), { preserveScroll: true })
   }
   usePageFocus(onPageGetsFocus)
   return (
@@ -60,14 +60,22 @@ export default function Dashboard({ auth, goals, todos, clients, completed }: Pr
 
         <div className='bg-white dark:bg-slate-500 my-4'>
           <div className='mx-auto max-w-7xl p-4 space-y-4'>
-            <h3 className='dark:text-orange-400 text-orange-700 font-semibold'>Milagro</h3>
-            <TodosList todos={todos.filter(f => f.priority == 1)} setSelected={setSelected} selected={selected} />
-            <h3 className='dark:text-lime-400 text-lime-700 font-semibold'>Prioridad</h3>
-            <TodosList todos={todos.filter(f => f.priority == 2)} setSelected={setSelected} selected={selected} />
-            <h3 className='text-stone-700 font-semibold'>Algún día</h3>
-            <TodosList todos={todos.filter(f => f.priority == 3)} setSelected={setSelected} selected={selected} />
-            <h3 className='text-gray-600 font-semibold'>Delegar</h3>
-            <TodosList todos={todos.filter(f => f.priority == 4)} setSelected={setSelected} selected={selected} />
+            <div>
+              <h3 className='dark:text-orange-400 text-orange-700 font-semibold'>Milagro</h3>
+              <TodosList todos={todos.filter(f => f.priority == 1)} setSelected={setSelected} selected={selected} />
+            </div>
+            <div>
+              <h3 className='dark:text-lime-400 text-lime-700 font-semibold'>Prioridad</h3>
+              <TodosList todos={todos.filter(f => f.priority == 2)} setSelected={setSelected} selected={selected} />
+            </div>
+            <div>
+              <h3 className='text-stone-700 font-semibold'>Algún día</h3>
+              <TodosList todos={todos.filter(f => f.priority == 3)} setSelected={setSelected} selected={selected} />
+            </div>
+            <div>
+              <h3 className='text-gray-600 font-semibold'>Delegar</h3>
+              <TodosList todos={todos.filter(f => f.priority == 4)} setSelected={setSelected} selected={selected} />
+            </div>
           </div>
         </div>
       </div>

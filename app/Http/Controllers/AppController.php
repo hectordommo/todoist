@@ -18,14 +18,17 @@ class AppController extends Controller
         $goal_tasks = Todo::select(DB::raw('goal_id, count(goal_id) as count'))->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])->groupBy('goal_id')->get();
         $goal_tasks_done = Todo::select(DB::raw('goal_id, count(goal_id) as count'))->where('completed', true)->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])->groupBy('goal_id')->get();
         // query todos and catalog
+        DB::enableQueryLog();
         $goals = Goal::orderBy('priority')->get();
         $clients = Client::orderBy('name')->get();
         $completed = $request->has('completed') && $request->completed;
+
         $query = Todo::with('client', 'project', 'goal' )
             ->orderBy('priority');
+
         if(!$completed) {
 
-            $query->where(function($query) { $query->whereNull('completed_at')->whereOr('completed_at', now()->format('Y-m-d')); });
+            $query->where(function($query) { $query->whereNull('completed_at')->orWhere('completed_at', now()->format('Y-m-d')); });
         }
         $todos = $query->get();
 
