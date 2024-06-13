@@ -14,7 +14,7 @@ type Props = {
   auth: Auth,
   goals: Goal[]
   todos: Todo
-  clients: Client
+  clients: Client[]
   completed: boolean
 }
 export default function Dashboard({ auth, goals, todos, clients, completed }: Props) {
