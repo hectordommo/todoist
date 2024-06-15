@@ -167,7 +167,7 @@ function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
                           'bg-stone-200': !data.completed,
                           'text-stone-800': !data.completed,
                         },
-                          'active:bg-zinc-300 border border-stale-600 rounded-full flex-shrink-0 size-6 m-3 flex items-center justify-center')} type="button">
+                          'active:bg-zinc-300 border border-stale-600 rounded-full flex-shrink-0 size-6 mr-3 mt-3 mb-3 flex items-center justify-center')} type="button">
                         <Task className="size-3" />
                       </button>
                       <ReactTextareaAutosize value={data.activity} name='activity' onChange={e => setData({ ...data, activity: e.target.value })} className='border-none border-b border-b-gray-600 p-2 w-full outline-none appearance-none focus:outline-yellow-100' placeholder='Que tienes que hacer?' />
