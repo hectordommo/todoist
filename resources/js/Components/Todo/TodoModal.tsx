@@ -153,7 +153,7 @@ function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
                 leaveFrom="opacity-100 transform-[scale(100%)]"
                 leaveTo="opacity-0 transform-[scale(95%)]"
               >
-                <DialogPanel className="z-20 w-full sm:1/2 rounded-xl bg-white text-black p-3 md:p-6">
+                <DialogPanel className="z-20 w-full sm:1/2 rounded-xl bg-white text-black p-4 md:p-6">
                   <DialogTitle as="h3" className="text-base/7 font-medium mb-4 text-gray-400">
                     Agregar nueva actividad
                   </DialogTitle>
@@ -175,7 +175,7 @@ function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
                     </fieldset>
                     <fieldset className=' space-x-4'>
                       <button type='button' accessKey='o' className='p-2 bg-zinc-100 hover:bg-zinc-300 active:bg-zinc-200 rounded' onClick={toggleObjective}>{goal ? goal?.name : 'Ninguno objetivo'}</button>
-                      <button type='button' accessKey='o' className='p-2 bg-zinc-100 hover:bg-zinc-300 active:bg-zinc-200 rounded' onClick={togglePriority}>{priorities[data.priority - 1]}</button>
+                      <button type='button' accessKey='p' className='p-2 bg-zinc-100 hover:bg-zinc-300 active:bg-zinc-200 rounded' onClick={togglePriority}>{priorities[data.priority - 1]}</button>
                     </fieldset>
                     <fieldset className='flex flew-row'>
                       <select className='rounded' value={data.client_id} onChange={(e) => setData({ ...data, client_id: e.target.value })}>
