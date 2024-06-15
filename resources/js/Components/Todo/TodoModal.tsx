@@ -153,19 +153,19 @@ function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
                 leaveFrom="opacity-100 transform-[scale(100%)]"
                 leaveTo="opacity-0 transform-[scale(95%)]"
               >
-                <DialogPanel className="z-20 w-11/12 sm:1/2 rounded-xl bg-white text-black p-6 ">
-                  <DialogTitle as="h3" className="text-base/7 font-medium ">
+                <DialogPanel className="z-20 w-full sm:1/2 rounded-xl bg-white text-black p-3 md:p-6">
+                  <DialogTitle as="h3" className="text-base/7 font-medium mb-4 text-gray-400">
                     Agregar nueva actividad
                   </DialogTitle>
 
-                  <form onSubmit={onSubmit} className='space-y-2'>
+                  <form onSubmit={onSubmit} className='space-y-4'>
                     <fieldset className='flex flex-row justify-center items-center space-x-1'>
                       <button onClick={toggleCompleted} className={
                         cn({
                           'bg-indigo-600': data.completed,
                           'text-white': data.completed,
                           'bg-stone-200': !data.completed,
-                          'text-stone-700': !data.completed,
+                          'text-stone-800': !data.completed,
                         },
                           'active:bg-zinc-300 border border-stale-600 rounded-full flex-shrink-0 size-6 m-3 flex items-center justify-center')} type="button">
                         <Task className="size-3" />
@@ -173,25 +173,25 @@ function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
                       <ReactTextareaAutosize value={data.activity} name='activity' onChange={e => setData({ ...data, activity: e.target.value })} className='border-none border-b border-b-gray-600 p-2 w-full outline-none appearance-none focus:outline-yellow-100' placeholder='Que tienes que hacer?' />
                       {errors?.activity && (<p className='text-red-500 mb-4 -mt-2 self-stretch'>{errors?.activity}</p>)}
                     </fieldset>
-                    <fieldset className='pl-3 space-x-4'>
+                    <fieldset className=' space-x-4'>
                       <button type='button' accessKey='o' className='p-2 bg-zinc-100 hover:bg-zinc-300 active:bg-zinc-200 rounded' onClick={toggleObjective}>{goal ? goal?.name : 'Ninguno objetivo'}</button>
                       <button type='button' accessKey='o' className='p-2 bg-zinc-100 hover:bg-zinc-300 active:bg-zinc-200 rounded' onClick={togglePriority}>{priorities[data.priority - 1]}</button>
                     </fieldset>
-                    <fieldset className='pl-3 flex flew-row'>
+                    <fieldset className='flex flew-row'>
                       <select className='rounded' value={data.client_id} onChange={(e) => setData({ ...data, client_id: e.target.value })}>
-                        <option>Ninguno</option>
+                        <option>Ningún cliente</option>
 
                         {
                           clients.map((client: Client) => (<option key={client.id} value={client.id}>{client.name}</option>))
                         }
                       </select>
                     </fieldset>
-                    <div className="mt-4">
+                    <div className="mt-4 flex justify-end">
                       <Button
                         className="outline outline-white focus:outline-green-500 inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
                         type="submit"
                       >
-                        Save
+                        Guardar
                       </Button>
                     </div>
                   </form>
