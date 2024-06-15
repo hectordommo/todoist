@@ -27,6 +27,7 @@ export interface Todo {
     goal_id: number
     delivery: string
     goal: Goal
+    completed: boolean
 }
 
 export interface Client {
