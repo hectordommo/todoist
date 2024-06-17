@@ -4,6 +4,7 @@ import { cn } from '../../utils'
 import Checkbox from '../Checkbox'
 import { router } from '@inertiajs/react'
 
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 type Props = {
   todos: Todo[]
   setSelected: (t: Todo) => void
@@ -36,7 +37,6 @@ const TodosList = ({ todos, setSelected, selected }: Props) => {
   }
   const onSelect = (todo) => {
     setSelected(todo)
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     if (isMobile) {
       dispatchEvent(new Event('todo:edit'));
     }
@@ -52,7 +52,7 @@ const TodosList = ({ todos, setSelected, selected }: Props) => {
         todos.map((todo, index) => (
           <article onClick={() => onSelect(todo)} data-todo={todo} key={`t-${todo.id}`} onFocus={() => setSelected(todo)}
             className={
-              cn('px-1 py-2', "todo-focusable flex flex-row items-center gap-2 rounded border-b outline outline-white dark:outline-slate-500 focus:outline-yellow-300 transform transition-transform duration-300 hover:-translate-y-1 cursor-pointer",
+              cn('px-1 py-2', "todo-focusable flex flex-row items-center gap-2 border-b dark:outline-slate-500 focus:outline-yellow-300 transform transition-transform duration-300 hover:-translate-y-1 cursor-pointer",
                 { 'outline-amber-700': selected?.id == todo.id })
             }
             tabIndex={0}>
