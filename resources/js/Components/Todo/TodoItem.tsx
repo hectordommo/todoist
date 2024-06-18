@@ -11,8 +11,11 @@ type Props = {
   handleCheck: (todo: Todo) => void
   todo: Todo
   selected: Todo
+  draggable: boolean
 }
-const TodoItem = ({ todo, selected, onSelect, setSelected, handleCheck }: Props) => {
+const Wrapper = ({className, draggable, todo, tabIndex, children}) => {
+
+  if(! todo.id) debugger
   const {
     attributes,
     listeners,
@@ -26,11 +29,29 @@ const TodoItem = ({ todo, selected, onSelect, setSelected, handleCheck }: Props)
     transform: CSS.Transform.toString(transform),
     transition,
   };
+
+  if(draggable) {
+    return (
+      <article className={cn( className, { 'outline-amber-700': selected?.id == todo.id, 'z-10': active ? (active.id == todo.id) : false } )} ref={setNodeRef} style={style} {...attributes} {...listeners} onClick={() => onSelect(todo)} data-todo={todo} key={`t-${todo.id}`} onFocus={() => setSelected(todo)} tabIndex={tabIndex}>
+      {children}
+      </article>
+    )
+  }else {
+
+      return <article className={className} onClick={() => onSelect(todo)} data-todo={todo} key={`t-${todo.id}`} onFocus={() => setSelected(todo)} tabIndex={tabIndex}>
+      {children}
+      </article>
+  }
+}
+const TodoItem = ({ todo, selected, onSelect, setSelected, handleCheck, draggable }: Props) => {
+
   return (
-      <article ref={setNodeRef} style={style} {...attributes} {...listeners} onClick={() => onSelect(todo)} data-todo={todo} key={`t-${todo.id}`} onFocus={() => setSelected(todo)}
+      <Wrapper
+        todo={todo}
+        draggable={draggable}
         className={
           cn('px-1 py-2', "z-0 todo-focusable flex flex-row bg-white dark:bg-gray-600 items-center gap-2 border-b dark:outline-slate-500 focus:outline-yellow-300 cursor-pointer",
-            { 'outline-amber-700': selected?.id == todo.id, 'z-10': active ? (active.id == todo.id) : false })
+            )
         }
         tabIndex={0}>
         <Checkbox onChange={(ev) => handleCheck(ev, todo, !todo.completed)} checked={todo.completed} />
@@ -43,7 +64,7 @@ const TodoItem = ({ todo, selected, onSelect, setSelected, handleCheck }: Props)
           <span className='text-sm p-1 rounded-lg'>{todo.client?.name}</span>
         </div>
         <span className='w-4 text-xs bg-stone-200 text-stone-500 px-1 rounded flex items-center'>{todo.value}</span>
-      </article>
+      </Wrapper>
   )
 }
 

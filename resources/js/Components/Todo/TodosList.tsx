@@ -16,6 +16,7 @@ type Props = {
 const TodosList = ({ todos, setSelected, selected, onSorted }: Props) => {
   const [focusedElement, setFocusedElement] = useState<HTMLElement | null>(null);
   const [items, setItems] = useState(todos)
+  const [mobile] = useState(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent))
 
   useEffect(() => {
     setItems(todos)
@@ -40,7 +41,7 @@ const TodosList = ({ todos, setSelected, selected, onSorted }: Props) => {
     useSensor(PointerSensor),
   );
   function handleDragEnd(event) {
-    const {active, over} = event;
+    const { active, over } = event;
 
     if (active.id !== over.id) {
       setItems((items) => {
@@ -52,18 +53,30 @@ const TodosList = ({ todos, setSelected, selected, onSorted }: Props) => {
       });
     }
   }
+  if (mobile) {
 
-  return (
-    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-          <SortableContext items={todos} strategy={verticalListSortingStrategy}>
-      {
-        items.map((todo, index) => (
-          <TodoItem selected={selected} key={`todo-${todo.id}`} todo={todo} onSelect={onSelect} setSelected={setSelected} handleCheck={handleCheck} />
+    <DndContext sensors={sensors} onDragEnd={handleDragEnd} >
+      <SortableContext items={todos} strategy={verticalListSortingStrategy}>
+        {
+          items.map((todo, index) => (
+            <TodoItem draggable={true} selected={selected} key={`todo-${todo.id}`} todo={todo} onSelect={onSelect} setSelected={setSelected} handleCheck={handleCheck} />
           ))
-      }
+        }
       </SortableContext>
-    </DndContext>
-  )
+    </DndContext >
+  } else {
+
+    return (
+      <>
+        {
+          items.map((todo, index) => (
+            <TodoItem draggable={false} selected={selected} key={`todo-${todo.id}`} todo={todo} onSelect={onSelect} setSelected={setSelected} handleCheck={handleCheck} />
+          )
+          )
+        }
+      </>
+    )
+  }
 }
 
 export default TodosList
