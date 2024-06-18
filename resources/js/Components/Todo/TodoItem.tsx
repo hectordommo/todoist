@@ -27,7 +27,7 @@ const TodoItem = ({ todo, selected, onSelect, setSelected, handleCheck }: Props)
     transition,
   };
   return (
-      <article ref={setNodeRef} style={style} {...attributes} {...listeners} onClick={() => active ? null : onSelect(todo)} data-todo={todo} key={`t-${todo.id}`} onFocus={() => setSelected(todo)}
+      <article ref={setNodeRef} style={style} {...attributes} {...listeners} onClick={() => onSelect(todo)} data-todo={todo} key={`t-${todo.id}`} onFocus={() => setSelected(todo)}
         className={
           cn('px-1 py-2', "z-0 todo-focusable flex flex-row bg-white dark:bg-gray-600 items-center gap-2 border-b dark:outline-slate-500 focus:outline-yellow-300 cursor-pointer",
             { 'outline-amber-700': selected?.id == todo.id, 'z-10': active ? (active.id == todo.id) : false })
