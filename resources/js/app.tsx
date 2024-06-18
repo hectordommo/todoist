@@ -24,7 +24,7 @@ createInertiaApp({
             <Provider theme={defaultTheme}>
                 <App {...props} />
             </Provider>
-            );
+        );
     },
     progress: {
         color: '#4B5563',

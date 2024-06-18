@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
 Route::group([], function () {
     Route::post('/goals', [GoalsController::class, 'store'])->name('goals.store');
     Route::post('/todo', [TodoController::class, 'store'])->name('todo.store');
+    Route::post('/todo/sort', [TodoController::class, 'sort'])->name('todo.sort');
     Route::put('/todo/{todo}', [TodoController::class, 'update'])->name('todo.update');
     Route::post('/client', [ClientController::class, 'store'])->name('client.store');
 

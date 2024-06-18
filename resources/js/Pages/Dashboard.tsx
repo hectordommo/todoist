@@ -17,6 +17,7 @@ type Props = {
   clients: Client[]
   completed: boolean
 }
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 export default function Dashboard({ auth, goals, todos, clients, completed }: Props) {
   const priorities = ['Milagro', 'Prioridad', 'Algún día', 'Delegar']
   const [selected, _] = useState(null)
@@ -29,9 +30,25 @@ export default function Dashboard({ auth, goals, todos, clients, completed }: Pr
     store.setTodo(todo)
   }
   const handleCompleted = (ev) => {
-    console.log(ev)
     router.visit(route('dashboard', { completed: ev }), { preserveScroll: true })
   }
+  const onSorted = (resorted: Todo[]) => {
+    const data = {todos_ids:resorted.map(t => t.id)}
+    fetch(route('todo.sort'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Set the content type to JSON
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': csrfToken
+      },
+      body: JSON.stringify(data)
+    })
+    .catch(e => {
+        console.log(e)
+      })
+    // router.post(route('todo.sort'), resorted.map(t => t.id), {preserveState: true, preserveScroll: true, only: []})
+  }
+
   usePageFocus(onPageGetsFocus)
   return (
     <AuthenticatedLayout
@@ -62,15 +79,15 @@ export default function Dashboard({ auth, goals, todos, clients, completed }: Pr
           <div className='mx-auto max-w-7xl p-4 space-y-4'>
             <div className='space-y-1'>
               <h3 className='dark:text-orange-400 text-orange-700 font-semibold'>Milagro</h3>
-              <TodosList todos={todos.filter(f => f.priority == 1)} setSelected={setSelected} selected={selected} />
+              <TodosList onSorted={onSorted} todos={todos.filter(f => f.priority == 1)} setSelected={setSelected} selected={selected} />
             </div>
             <div className='space-y-1'>
               <h3 className='dark:text-lime-400 text-lime-700 font-semibold'>Prioridad</h3>
-              <TodosList todos={todos.filter(f => f.priority == 2)} setSelected={setSelected} selected={selected} />
+              <TodosList onSorted={onSorted} todos={todos.filter(f => f.priority == 2)} setSelected={setSelected} selected={selected} />
             </div>
             <div className='space-y-1'>
               <h3 className='text-stone-700 font-semibold'>Algún día</h3>
-              <TodosList todos={todos.filter(f => f.priority == 3)} setSelected={setSelected} selected={selected} />
+              <TodosList onSorted={onSorted} todos={todos.filter(f => f.priority == 3)} setSelected={setSelected} selected={selected} />
             </div>
             <div className='space-y-1'>
               <h3 className='text-gray-600 font-semibold'>Delegar</h3>

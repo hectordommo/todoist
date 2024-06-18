@@ -24,7 +24,7 @@ class AppController extends Controller
         $completed = $request->has('completed') && $request->completed;
 
         $query = Todo::with('client', 'project', 'goal' )
-            ->orderBy('priority');
+            ->orderBy('value');
 
         if(!$completed) {
 

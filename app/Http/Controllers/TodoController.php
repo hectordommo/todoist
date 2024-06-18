@@ -50,4 +50,13 @@ class TodoController extends Controller
 
         return back()->with('success', 'Task added');
     }
+
+    public function sort(Request $request) {
+        $ids = $request->get('todos_ids',[]);
+        foreach($ids as $index => $id) {
+            dump($id . ' ' . $index);
+            Todo::where('id', $id)->update(['value' => ($index + 1)]);
+        }
+        return response()->json(['status' => 200]);
+    }
 }
