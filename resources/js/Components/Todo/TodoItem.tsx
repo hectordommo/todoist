@@ -13,7 +13,7 @@ type Props = {
   selected: Todo
   draggable: boolean
 }
-const Wrapper = ({className, draggable, todo, tabIndex, children}) => {
+const Wrapper = ({className, draggable, todo, tabIndex, children, onSelect, setSelected, selected}) => {
 
   if(! todo.id) debugger
   const {
@@ -32,7 +32,11 @@ const Wrapper = ({className, draggable, todo, tabIndex, children}) => {
 
   if(draggable) {
     return (
-      <article className={cn( className, { 'outline-amber-700': selected?.id == todo.id, 'z-10': active ? (active.id == todo.id) : false } )} ref={setNodeRef} style={style} {...attributes} {...listeners} onClick={() => onSelect(todo)} data-todo={todo} key={`t-${todo.id}`} onFocus={() => setSelected(todo)} tabIndex={tabIndex}>
+      <article className={cn( className, { 'outline-amber-700': selected?.id == todo.id, 'z-10': active ? (active.id == todo.id) : false } )}
+        ref={setNodeRef}
+        style={style} {...attributes} {...listeners} onClick={() => onSelect(todo)}
+        data-todo={todo} key={`t-${todo.id}`}
+        onFocus={() => setSelected(todo)} tabIndex={tabIndex}>
       {children}
       </article>
     )
@@ -45,9 +49,13 @@ const Wrapper = ({className, draggable, todo, tabIndex, children}) => {
 }
 const TodoItem = ({ todo, selected, onSelect, setSelected, handleCheck, draggable }: Props) => {
 
+  console.log(todo.id)
   return (
       <Wrapper
         todo={todo}
+        selected={selected}
+        onSelect={onSelect}
+        setSelected={setSelected}
         draggable={draggable}
         className={
           cn('px-1 py-2', "z-0 todo-focusable flex flex-row bg-white dark:bg-gray-600 items-center gap-2 border-b dark:outline-slate-500 focus:outline-yellow-300 cursor-pointer",

@@ -42,7 +42,6 @@ const TodosList = ({ todos, setSelected, selected, onSorted }: Props) => {
   );
   function handleDragEnd(event) {
     const { active, over } = event;
-
     if (active.id !== over.id) {
       setItems((items) => {
         const oldIndex = items.findIndex(i => i.id === active.id);
@@ -53,12 +52,14 @@ const TodosList = ({ todos, setSelected, selected, onSorted }: Props) => {
       });
     }
   }
-  if (mobile) {
+  console.log('count', items.length)
+  console.log('ismobile', isMobile)
+  if (!isMobile) {
 
-    <DndContext sensors={sensors} onDragEnd={handleDragEnd} >
-      <SortableContext items={todos} strategy={verticalListSortingStrategy}>
+    return <DndContext sensors={sensors} onDragEnd={handleDragEnd} >
+      <SortableContext items={items} strategy={verticalListSortingStrategy}>
         {
-          items.map((todo, index) => (
+          items.map(todo => (
             <TodoItem draggable={true} selected={selected} key={`todo-${todo.id}`} todo={todo} onSelect={onSelect} setSelected={setSelected} handleCheck={handleCheck} />
           ))
         }
@@ -68,10 +69,12 @@ const TodosList = ({ todos, setSelected, selected, onSorted }: Props) => {
 
     return (
       <>
+        <span>{todos.length}</span>
+        <span>{items.length}</span>
         {
           items.map((todo, index) => (
             <TodoItem draggable={false} selected={selected} key={`todo-${todo.id}`} todo={todo} onSelect={onSelect} setSelected={setSelected} handleCheck={handleCheck} />
-          )
+            )
           )
         }
       </>
