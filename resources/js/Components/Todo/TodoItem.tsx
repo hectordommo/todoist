@@ -49,7 +49,6 @@ const Wrapper = ({className, draggable, todo, tabIndex, children, onSelect, setS
 }
 const TodoItem = ({ todo, selected, onSelect, setSelected, handleCheck, draggable }: Props) => {
 
-  console.log(todo.id)
   return (
       <Wrapper
         todo={todo}

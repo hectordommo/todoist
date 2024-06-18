@@ -52,8 +52,7 @@ const TodosList = ({ todos, setSelected, selected, onSorted }: Props) => {
       });
     }
   }
-  console.log('count', items.length)
-  console.log('ismobile', isMobile)
+
   if (!isMobile) {
 
     return <DndContext sensors={sensors} onDragEnd={handleDragEnd} >
