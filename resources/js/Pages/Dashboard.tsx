@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import type { Auth, Client, Goal, Todo } from '../types';
 import CreateGoalModal from '../Components/Todo/CreateGoalModal';
 import TodoModal from '../Components/Todo/TodoModal';
@@ -10,6 +10,7 @@ import Cmdk from '../Components/Cmdk';
 import ClientModal from '../Components/Client/ClientModal';
 import usePageFocus from '../hooks/usePageFocus';
 import { Switch } from '@headlessui/react';
+import BottomNav from '../Components/UI/BottomNav';
 type Props = {
   auth: Auth,
   goals: Goal[]
@@ -95,6 +96,7 @@ export default function Dashboard({ auth, goals, todos, clients, completed }: Pr
           </div>
         </div>
       </div>
+      <BottomNav />
     </AuthenticatedLayout>
   );
 }

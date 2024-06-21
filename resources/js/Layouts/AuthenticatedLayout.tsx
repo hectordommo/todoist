@@ -119,7 +119,7 @@ export default function Authenticated({ user, header, children }) {
                 </header>
             )}
 
-            <main>{children}</main>
+            <main className='pb-20 md:pb-0'>{children}</main>
         </div>
     );
 }

@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::group([], function () {
+    Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
+
     Route::post('/goals', [GoalsController::class, 'store'])->name('goals.store');
     Route::post('/todo', [TodoController::class, 'store'])->name('todo.store');
     Route::post('/todo/sort', [TodoController::class, 'sort'])->name('todo.sort');
