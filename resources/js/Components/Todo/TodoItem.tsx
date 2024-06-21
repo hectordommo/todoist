@@ -64,7 +64,7 @@ const TodoItem = ({ todo, selected, onSelect, setSelected, handleCheck, draggabl
       <div className="flex flex-row space-x-1">
         <Checkbox onChange={(ev) => handleCheck(ev, todo, !todo.completed)} checked={todo.completed} />
         <div className="flex items-start md:items-center pt-2 md:pt-0">
-          <span className='h-1 w-1 bg-gray-300 rounded-full flex-shrink-0 inline-block' style={{ backgroundColor: todo.client_id ? todo.client.color : '#f5f5f5' }}></span>
+          <span className='h-2 w-2 bg-gray-300 rounded-full flex-shrink-0 inline-block' style={{ backgroundColor: todo.client_id ? todo.client.color : '#f5f5f5' }}></span>
         </div>
         <p className='flex-1 flex flex-row items-center space-x-2 justify-start'>
           <span className=''>{todo.activity}</span>
