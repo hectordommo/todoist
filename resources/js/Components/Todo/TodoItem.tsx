@@ -8,7 +8,7 @@ import { CSS } from '@dnd-kit/utilities';
 type Props = {
   onSelect: (todo: Todo) => void
   setSelected: (todo: Todo) => void
-  handleCheck: (todo: Todo) => void
+  handleCheck: (ev, todo: Todo, completed: boolean) => void
   todo: Todo
   selected: Todo
   draggable: boolean
@@ -63,7 +63,6 @@ const TodoItem = ({ todo, selected, onSelect, setSelected, handleCheck, draggabl
         tabIndex={0}>
         <Checkbox onChange={(ev) => handleCheck(ev, todo, !todo.completed)} checked={todo.completed} />
         <p className='flex-1 flex flex-row items-center space-x-2'>
-        {todo.id}
           <span className='h-1 w-1 ml-2 bg-gray-300 rounded-full flex-shrink-0 inline-block' style={{ backgroundColor: todo.client_id ? todo.client.color : '#f5f5f5' }}></span>
           <span className=''>{todo.activity}</span></p>
         <div>

@@ -16,7 +16,6 @@ type Props = {
 const TodosList = ({ todos, setSelected, selected, onSorted }: Props) => {
   const [focusedElement, setFocusedElement] = useState<HTMLElement | null>(null);
   const [items, setItems] = useState(todos)
-  const [mobile] = useState(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent))
 
   useEffect(() => {
     setItems(todos)
@@ -68,8 +67,6 @@ const TodosList = ({ todos, setSelected, selected, onSorted }: Props) => {
 
     return (
       <>
-        <span>{todos.length}</span>
-        <span>{items.length}</span>
         {
           items.map((todo, index) => (
             <TodoItem draggable={false} selected={selected} key={`todo-${todo.id}`} todo={todo} onSelect={onSelect} setSelected={setSelected} handleCheck={handleCheck} />
