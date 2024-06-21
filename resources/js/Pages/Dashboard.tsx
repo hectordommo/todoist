@@ -23,8 +23,7 @@ export default function Dashboard({ auth, goals, todos, clients, completed }: Pr
   const [selected, _] = useState(null)
   const store = useTodosIU()
   const onPageGetsFocus = () => {
-    router.visit('/dashboard', { only: ['clients', 'todos'] })
-    console.log('window focus')
+    router.visit('/dashboard', { only: ['clients', 'todos'], preserveState: true })
   }
   const setSelected = (todo) => {
     store.setTodo(todo)
