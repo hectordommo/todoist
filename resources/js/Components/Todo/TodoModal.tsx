@@ -139,7 +139,7 @@ function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
       </Button>
 
       <Transition appear show={isOpen}>
-        <Dialog as="div" className="relative z-10 focus:outline-none" onClose={close} >
+    <Dialog as="div" className="relative z-10 focus:outline-none " onClose={close} >
 
           <div className="fixed inset-0 bg-black/30 z-0 backdrop-blur-md" aria-hidden="true" />
 
@@ -153,7 +153,7 @@ function TodoModal({ goals, todo, priorities, clients, setSelected }: Props) {
                 leaveFrom="opacity-100 transform-[scale(100%)]"
                 leaveTo="opacity-0 transform-[scale(95%)]"
               >
-                <DialogPanel className="z-20 w-full sm:1/2 rounded-xl bg-white text-black p-4 md:p-6">
+                <DialogPanel className="z-20 w-full sm:1/2 rounded-xl bg-white text-black p-4 md:p-6 mx-auto max-w-screen-lg">
                   <DialogTitle as="h3" className="text-base/7 font-medium mb-4 text-gray-400">
                     Agregar nueva actividad
                   </DialogTitle>
